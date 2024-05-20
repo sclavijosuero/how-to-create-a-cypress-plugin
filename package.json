@@ -1,0 +1,25 @@
+{
+  "name": "how-to-create-a-cypress-plugin",
+  "version": "1.0.0",
+  "description": "Example of how to create a Cypress NPM Plugin",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sclavijosuero/how-to-create-a-cypress-plugin.git"
+  },
+  "keywords": [
+    "plugin"
+  ],
+  "author": "Sebastian Clavijo Suero",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sclavijosuero/how-to-create-a-cypress-plugin/issues"
+  },
+  "homepage": "https://github.com/sclavijosuero/how-to-create-a-cypress-plugin#readme",
+  "devDependencies": {
+    "cypress": "^13.9.0"
+  }
+}
