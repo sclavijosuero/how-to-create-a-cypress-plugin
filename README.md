@@ -39,12 +39,12 @@ Before utilizing the custom commands, import them at the beginning of your Cypre
 
 To load only the assertions commands:
 ``` javascript
-import 'how-to-create-a-cypress-plugin/assertions';
+import 'how-to-create-a-cypress-plugin/src/assertions';
 ```
 
 To load only the custom log commands:
 ``` javascript
-import 'how-to-create-a-cypress-plugin/custom-log';
+import 'how-to-create-a-cypress-plugin/src/custom-log';
 ```
 
 To load both sets of commands:
