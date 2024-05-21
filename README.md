@@ -2,7 +2,7 @@
 
 This plugin serves as an example of how to create a Cypress NPM plugin. It features two custom commands: one for comparing aliases and another for styled logging within the Cypress runner log.
 
-You can read the full post on how to create a Cypress NPM plugin in my blog entry titled "[The Quirky Guide to Crafting and Publishing Your Cypress NPM Plugin](https://dev.to/sebastianclavijo/the-quirky-guide-to-crafting-and-publishing-your-cypress-npm-plugin-5hbb-temp-slug-1196131 "The Quirky Guide to Crafting and Publishing Your Cypress NPM Plugin")".
+You can read the full post on how to create a Cypress NPM plugin in my blog entry titled "[The Quirky Guide to Crafting and Publishing Your Cypress NPM Plugin](https://dev.to/sebastianclavijo/the-quirky-guide-to-crafting-and-publishing-your-cypress-npm-plugin-2pii "The Quirky Guide to Crafting and Publishing Your Cypress NPM Plugin")".
 
 ## Installation
 
