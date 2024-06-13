@@ -1,88 +1,244 @@
-# how-to-create-a-cypress-plugin
+# cypress-ajv-schema-validator
 
-This plugin serves as an example of how to create a Cypress NPM plugin. It features two custom commands: one for comparing aliases and another for styled logging within the Cypress runner log.
+A Cypress plugin for API testing to validate the API response against Plain JSON schemas, Swagger documents, or OpenAPI documents using Ajv JSON Schema validator.
 
-You can read the full post on how to create a Cypress NPM plugin in my blog entry titled "[The Quirky Guide to Crafting and Publishing Your Cypress NPM Plugin](https://dev.to/sebastianclavijo/the-quirky-guide-to-crafting-and-publishing-your-cypress-npm-plugin-2pii "The Quirky Guide to Crafting and Publishing Your Cypress NPM Plugin")".
+![Overview](images/overview.png)
+
+## Main Features
+
+- Cypress command `cy.validateSchema()` and utility function `validateSchema()` to report JSON Schema validation errors in the response obtained from any network request with `cy.request()`.
+  
+- The command `cy.validateSchema()` is chainable and returns the original API response yielded.
+  
+- Schema is provided as a JSON object, that could come from a Cypress fixture.
+  
+- Can validate schemas provided as a **plain JSON schema***, **OpenAPI 3.0.1 schema document** and **Swagger 2.0 schema document**.
+  
+- Provides in the Cypress log a summary of the schema errors as well as a list of the individual errors in the schema validation.
+  
+- By clicking on the validation summary line, it outputs in the console the number of schema errors, a full list of the schema errors as provided by Ajv, as well as a nested tree view of the validated data indicating exactly the errors and where they are happening in an easy-to-understand format.
+  
+- It uses the Ajv Schema Validator as its core engine.
+
+&nbsp; 
+
+> ⭐⭐⭐⭐⭐
+> **Note:** This plugin complements **Filip Hric** [cypress-plugin-api](https://github.com/filiphric/cypress-plugin-api) and **Gleb Bahmutov** [@bahmutov/cy-api](https://github.com/bahmutov/cy-api) plugins to perform JSON schema validations.
+>
+> Example usage with these two API plugins:
+> `cy.api('/users/1').validateSchema(schema);`
+>
+> To see an example of `cypress-ajv-schema-validator` working with the `cypress-plugin-api` plugin for the Swagger PetStore API, check the sample test [test-petstore-with-cypress-plugin-api.js](cypress/e2e/test-petstore-with-cypress-plugin-api.js).
+
+&nbsp; 
+
+### About JSON Schemas and Ajv Schema Validator
+
+#### JSON Schema
+
+JSON Schema is a hierarchical, declarative language that describes and validates JSON data.
+
+### OpenAPI 3.0.1 and Swagger 2.0 Schema Documents
+
+The OpenAPI Specification (formerly Swagger Specification) are schema documents to describe your entire API (in JSON format or XML format). So a schema document will contain multiple schemas, one for each supported combination of **_Endpoint - Method - Expected Response Status_** (also called _path_) by that API.
+
+### Ajv JSON Schema Validator
+
+AJV, or Another JSON Schema Validator, is a JavaScript library that validates data objects against a JSON Schema structure.
+
+It was chosen as the core engine of the `cypress-ajv-schema-validator` plugin because of its versatility, speed, capabilities, continuous maintenance, and excellent documentation. For more information on Ajv, visit the [Ajv official website](https://ajv.js.org/).
+
+Ajv supports validation of the following schema formats: **JSON Schema**, **OpenAPI 3.0.1** specification, and **Swagger 2.0** specification. However, Ajv needs to be provided with the specific schema to be validated for an endpoint, method, and expected response; it cannot process a full OpenAPI 3.0.1 or Swagger 2.0 schema document by itself.
+
+The `cypress-ajv-schema-validator` plugin simplifies this by obtaining the correct schema definition for the endpoint you want to test. You just need to provide the full schema document (OpenAPI or Swagger) and the path to the schema definition of the service you want to validate for your API (_Endpoint - Method - Expected Response Status_).
+
+> **Note:** The Ajv instance used in this plugin (`cypress-ajv-schema-validator`) is configured with the options `{ allErrors: true, strict: false }` to display all validation errors and disable strict mode.
+
 
 ## Installation
 
-Install the plugin by running:
-
-```bash
-npm install how-to-create-a-cypress-plugin --save-dev
-```
-
-Or with Yarn:
-
-```
-yarn add how-to-create-a-cypress-plugin --dev
+```sh
+npm install cypress-ajv-schema-validator
+// or
+yarn add cypress-ajv-schema-validator
 ```
 
 ## Compatibility
 
-This plugin is compatible with Cypress version X.X.X and above.
+- Cypress 12.0.0 or higher
+- Ajv 8.16.0 or higher
+- ajv-formats 3.0.1 or higher
+
 
 ## Configuration
 
-No additional configuration is needed to use these commands beyond the standard Cypress setup.
+Add the following lines either to your `cypress/support/commands.js` to include the custom command and function globally, or directly in the test file that will host the schema validation tests:
+
+#### For `cy.validateSchema()` Custom Command
+
+```js
+import 'cypress-ajv-schema-validator';
+```
+
+#### For `validateSchema()` Function
+
+```js
+import validateSchema from 'cypress-ajv-schema-validator';
+```
+
 
 ## API Reference
 
-The plugin provides the following commands:
+### Custom Commands
 
-- **`compareAliases(chainer, alias1, alias2)`**: Compares two aliases using the specified chainer.
-- **`colorLog(message, hexColor, options)`**: Logs a message in the Cypress runner with the specified color and options.
+#### `cy.validateSchema(schema, path)`
 
-## Usage
+Validates the response body against the provided schema.
 
-Before utilizing the custom commands, import them at the beginning of your Cypress test files.
+##### Parameters
 
-To load only the assertions commands:
-``` javascript
-import 'how-to-create-a-cypress-plugin/src/assertions';
+- `schema` (object): The schema to validate against. Supported formats are plain JSON schema, Swagger, and OpenAPI documents.
+- `path` (object, optional): The path object to the schema definition in a Swagger or OpenAPI document.
+  - `endpoint` (string, optional): The endpoint path.
+  - `method` (string, optional): The HTTP method. Defaults to 'GET'.
+  - `status` (integer, optional): The response status code. Defaults to 200.
+
+##### Returns
+
+- `Cypress.Chainable`: The response object wrapped in a Cypress.Chainable.
+
+##### Throws
+
+- `Error`: If any of the required parameters are missing or if the schema or schema definition is not found.
+
+Example providing a Plain JSON schema:
+
+```js
+cy.request('GET', 'https://awesome.api.com/users/1')
+  .validateSchema(schema);
 ```
 
-To load only the custom log commands:
-``` javascript
-import 'how-to-create-a-cypress-plugin/src/custom-log';
+Example providing an OpenAPI 3.0.1 or Swagger 2.0 schema documents:
+
+```js
+cy.request('GET', 'https://awesome.api.com/users/1')
+  .validateSchema(schema, { endpoint: '/users/{id}', method: 'GET', status: 200 });
 ```
 
-To load both sets of commands:
-``` javascript
-import 'how-to-create-a-cypress-plugin';
-```
+### Functions
 
-Remember to use the correct import statement depending on which commands you need for your tests.
+#### `validateSchema(data, schema, path)`
 
-### Assertions
+Validates the given data against the provided schema.
 
-Use `cy.compareAliases()` to assert the equality of two aliases:
+##### Parameters
 
-``` javascript
-// Define aliases
-cy.get('@aliasOne').as('firstAlias');
-cy.get('@aliasTwo').as('secondAlias');
+- `data` (any): The data to be validated.
+- `schema` (object): The schema to validate against.
+- `path` (object, optional): The path object to the schema definition in a Swagger or OpenAPI document.
+  - `endpoint` (string, optional): The endpoint path.
+  - `method` (string, optional): The HTTP method. Defaults to 'GET'.
+  - `status` (integer, optional): The response status code. Defaults to 200.
 
-// Compare the aliases
-cy.compareAliases('deep.equal', '@firstAlias', '@secondAlias');
-```
+##### Returns
 
-### Custom Log
+- `Array`: An array of validation errors, or null if the data is valid against the schema.
 
-Use `cy.colorLog()` to output styled messages in the Cypress runner:
+##### Throws
 
-``` javascript
-// Log a message with color
-cy.colorLog('Message content', '#FF0000', {
-    displayName: "Error",
-    data: { detail: 'Error details' }
+- `Error`: If any of the required parameters are missing or if the schema or schema definition is not found.
+
+Example providing a Plain JSON schema:
+
+```js
+cy.request('GET', 'https://awesome.api.com/users/1').then(response => {
+  const data = response.body
+  const errors = validateSchema(data, schema);
+  expect(errors).to.have.length(0); // Assertion to ensure no validation errors
 });
 ```
 
+Example providing an OpenAPI 3.0.1 or Swagger 2.0 schema documents:
+
+```js
+cy.request('GET', 'https://awesome.api.com/users/1').then(response => {
+  const data = response.body
+  const errors = validateSchema(data, schema, { endpoint: '/users/{id}', method: 'GET', status: 200 });
+  expect(errors).to.have.length(0); // Assertion to ensure no validation errors
+});
+```
+
+
+## Usage Examples
+
+For detailed usage examples, check the document [USAGE-EXAMPLES.md](USAGE-EXAMPLES.md).
+
+The examples included are for using:
+
+- `cy.validateSchema()` command with a **Plain JSON schema**.
+  
+- `cy.validateSchema()` command with an **OpenAPI 3.0.1 schema** document.
+  
+- `cy.validateSchema()` command with a **Swagger 2.0 schema** document.
+
+- `validateSchema()` function with an **OpenAPI 3.0.1 schema** document.
+  
+- `cy.validateSchema()` command in conjunction with **`cy.api()` from the `cypress-plugin-api` or `@bahmutov/cy-api` plugins**.
+
+
+## Validation Results
+
+Here are some screenshots of schema validation tests run in Cypress.
+
+### Test Passed
+
+When a test passes, the Cypress log will show the message: "✔️ **PASSED - THE RESPONSE BODY IS VALID AGAINST THE SCHEMA.**".
+
+![Test Passed](images/pass1.png)
+
+### Test Failed
+
+When a test fails, the Cypress log will show the message: "❌ **FAILED - THE RESPONSE BODY IS NOT VALID AGAINST THE SCHEMA**"; indicating the total number of errors: _(Number of schema errors: N_).
+
+Also, the Cypress log will show an entry for each of the individual schema validation errors as provided by Ajv. The errors that correspond to missing fields in the data validated are marked with the symbol 🗑️, and the rest of the errors with the symbol 👉.
+
+![Test Failed Overview](images/error11.png)
+
+#### Detailed Error View in the Console
+
+If you open the Console in the browser DevTools, and click on the summary line for the schema validation error in the Cypress log, the console will display detailed information about all the errors. This includes:
+
+- The total number of errors
+- The full list of errors as provided by the Ajv.
+- A user-friendly view of the validated data, highlighting where each validation error occurred and the exact reason for the mismatch.
+
+![Test Failed Details](images/error12.png)
+
+### Test Failed with More than 10 Errors
+
+When there are more than 10 schema validation errors, the Cypress log will show only the first 10 and, at the end of the list, an additional line indicating "**...and _N_ more errors.**".
+
+![Test Failed Many Errors](images/error21.png)
+
+#### Detailed Error View in the Console
+
+In this case, clicking on the summary line for the schema validation error in the Cypress log will also display: the total number of errors, the full list of errors as provided by Ajv, and the user-friendly view of the schema mismatches, making it easy to understand where the errors occurred.
+
+![Error Details in Console](images/error22.png)
+
+#### More Errors in the Console
+
+When clicking on the "**...and N more errors.**" line in the Cypress log, the browser console will show additional details for the errors grouped under that entry as provided by Ajv.
+
+![More Errors in Console](images/error23.png)
+
+
 ## License
 
-This plugin is licensed under the MIT License. See LICENSE for full license text.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+
 
 ## Changelog
 
-1.0.0 Initial release
+### [1.0.0]
+- Initial release.
