@@ -1,7 +1,7 @@
 {
   "name": "how-to-create-a-cypress-plugin",
-  "version": "1.0.0",
-  "description": "Example of how to create a Cypress NPM Plugin",
+  "version": "1.0.1",
+  "description": "Example of how to create a Cypress npm Plugin",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

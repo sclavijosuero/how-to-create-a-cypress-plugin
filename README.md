@@ -1,8 +1,8 @@
 # how-to-create-a-cypress-plugin
 
-This plugin serves as an example of how to create a Cypress NPM plugin. It features two custom commands: one for comparing aliases and another for styled logging within the Cypress runner log.
+This plugin serves as an example of how to create a Cypress npm plugin. It features two custom commands: one for comparing aliases and another for styled logging within the Cypress runner log.
 
-You can read the full post on how to create a Cypress NPM plugin in my blog entry titled "[The Quirky Guide to Crafting and Publishing Your Cypress NPM Plugin](https://dev.to/sebastianclavijo/the-quirky-guide-to-crafting-and-publishing-your-cypress-npm-plugin-5hbb-temp-slug-1196131 "The Quirky Guide to Crafting and Publishing Your Cypress NPM Plugin")".
+You can read the full post on how to create a Cypress npm plugin in my blog entry titled "[The Quirky Guide to Crafting and Publishing Your Cypress npm Plugin](https://dev.to/sebastianclavijo/the-quirky-guide-to-crafting-and-publishing-your-cypress-npm-plugin-2pii "The Quirky Guide to Crafting and Publishing Your Cypress npm Plugin")".
 
 ## Installation
 
@@ -12,15 +12,9 @@ Install the plugin by running:
 npm install how-to-create-a-cypress-plugin --save-dev
 ```
 
-Or with Yarn:
-
-```
-yarn add how-to-create-a-cypress-plugin --dev
-```
-
 ## Compatibility
 
-This plugin is compatible with Cypress version X.X.X and above.
+This plugin is compatible with Cypress version 12.0.0 and above.
 
 ## Configuration
 
@@ -84,5 +78,9 @@ cy.colorLog('Message content', '#FF0000', {
 This plugin is licensed under the MIT License. See LICENSE for full license text.
 
 ## Changelog
+
+1.0.1 Fix documentation typos
+ - https://github.com/sclavijosuero/how-to-create-a-cypress-plugin/issues/1
+ - https://github.com/sclavijosuero/how-to-create-a-cypress-plugin/issues/2
 
 1.0.0 Initial release
