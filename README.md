@@ -4,6 +4,8 @@ This plugin serves as an example of how to create a Cypress npm plugin. It featu
 
 You can read the full post on how to create a Cypress npm plugin in my blog entry titled "[The Quirky Guide to Crafting and Publishing Your Cypress npm Plugin](https://dev.to/sebastianclavijo/the-quirky-guide-to-crafting-and-publishing-your-cypress-npm-plugin-2pii "The Quirky Guide to Crafting and Publishing Your Cypress npm Plugin")".
 
+---
+
 If you'd like to support my work, consider buying me a coffee or contributing to a training session, so I can keep learning and sharing cool stuff with all of you. Thank you for your support!
 
 <a href="https://www.buymeacoffee.com/sclavijosuero" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 40px !important;width: 150px !important;" ></a>
