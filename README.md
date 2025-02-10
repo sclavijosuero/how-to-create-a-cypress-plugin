@@ -84,3 +84,7 @@ This plugin is licensed under the MIT License. See LICENSE for full license text
  - https://github.com/sclavijosuero/how-to-create-a-cypress-plugin/issues/2
 
 1.0.0 Initial release
+
+If you'd like to support my work, consider buying me a coffee or contributing to a training session, so I can keep learning and sharing cool stuff with all of you.
+Thank you for your support!
+<a href="https://www.buymeacoffee.com/sclavijosuero" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 40px !important;width: 150px !important;" ></a>
