@@ -88,5 +88,3 @@ This plugin is licensed under the MIT License. See LICENSE for full license text
  - https://github.com/sclavijosuero/how-to-create-a-cypress-plugin/issues/2
 
 1.0.0 Initial release
-
-
